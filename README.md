@@ -49,7 +49,7 @@
 ### 方法二：本地服务器（推荐）
 ```bash
 # 进入项目目录
-cd /Users/fangxiongwei/.gemini/antigravity/scratch/matrix-love
+cd /Users/xxxx/.gemini/antigravity/scratch/matrix-love
 
 # 使用Python启动简单服务器
 python3 -m http.server 8000
