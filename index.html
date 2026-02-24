@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>黑客帝国 · 爱心代码</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- 矩阵代码雨背景 -->
+    <canvas id="matrixCanvas"></canvas>
+
+    <!-- 主爱心容器 -->
+    <div class="heart-container">
+        <!-- 3D旋转爱心 -->
+        <div class="heart-3d">
+            <div class="heart-core"></div>
+            <div class="heart-glow"></div>
+        </div>
+
+        <!-- 粒子爱心 -->
+        <canvas id="particleHeart"></canvas>
+
+        <!-- 代码流爱心 -->
+        <canvas id="codeHeart"></canvas>
+    </div>
+
+    <!-- 文字信息 -->
+    <div class="message-container">
+        <h1 class="glitch" data-text="FOR MY LOVE">FOR MY LOVE</h1>
+        <p class="typing-text"></p>
+        <div class="code-line">
+            <span class="prompt">></span>
+            <span class="code-content">while(true) { love++; }</span>
+        </div>
+    </div>
+
+    <!-- 数据流效果 -->
+    <div class="data-stream"></div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

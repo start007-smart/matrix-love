@@ -1,0 +1,469 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background: #000;
+    font-family: 'Courier New', monospace;
+    position: relative;
+}
+
+/* ==================== 矩阵代码雨背景 ==================== */
+#matrixCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    opacity: 0.3;
+}
+
+/* ==================== 爱心容器 ==================== */
+.heart-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 400px;
+    z-index: 10;
+}
+
+
+/* ==================== 3D旋转爱心 ==================== */
+.heart-3d {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    /* 增大容器尺寸 */
+    height: 300px;
+    animation: float 6s ease-in-out infinite;
+    perspective: 1500px;
+    /* 增强透视效果 */
+    transform-style: preserve-3d;
+}
+
+.heart-core {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg,
+            #ff0844 0%,
+            #ff1744 25%,
+            #ff5252 50%,
+            #ff1744 75%,
+            #ff0844 100%);
+    clip-path: path('M12,21.35l-1.45-1.32C5.4,15.36,2,12.28,2,8.5C2,5.42,4.42,3,7.5,3c1.74,0,3.41,0.81,4.5,2.09C13.09,3.81,14.76,3,16.5,3C19.58,3,22,5.42,22,8.5c0,3.78-3.4,6.86-8.55,11.54L12,21.35z');
+    transform: scale(12);
+    /* 增大爱心尺寸 */
+    filter:
+        drop-shadow(0 0 40px #ff1744) drop-shadow(0 0 80px #ff1744) drop-shadow(0 0 120px rgba(255, 23, 68, 0.8)) drop-shadow(0 15px 60px rgba(255, 23, 68, 0.7));
+    /* 增强阴影 */
+    animation: heartbeat 1.5s ease-in-out infinite, rotate3d 12s linear infinite;
+    /* 真实心跳节奏 */
+}
+
+.heart-glow {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle,
+            rgba(255, 23, 68, 0.8) 0%,
+            rgba(255, 82, 82, 0.5) 30%,
+            rgba(255, 23, 68, 0.3) 60%,
+            transparent 80%);
+    animation: glowPulse 1.5s ease-in-out infinite;
+    /* 与心跳同步 */
+    filter: blur(30px);
+    /* 增强模糊发光效果 */
+    /* 添加模糊增强发光效果 */
+}
+
+/* ==================== 粒子爱心画布 ==================== */
+#particleHeart {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+/* ==================== 代码流爱心画布 ==================== */
+#codeHeart {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+/* ==================== 文字信息 ==================== */
+.message-container {
+    position: fixed;
+    bottom: 15%;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    z-index: 20;
+    color: #00ff41;
+}
+
+.glitch {
+    font-size: 3.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    position: relative;
+    text-shadow:
+        0 0 10px #00ff41,
+        0 0 20px #00ff41,
+        0 0 30px #00ff41,
+        0 0 40px #00ff41;
+    animation: glitch 1s infinite;
+    letter-spacing: 0.3rem;
+    margin-bottom: 1rem;
+}
+
+.glitch::before,
+.glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.glitch::before {
+    left: 2px;
+    text-shadow: -2px 0 #ff00ff;
+    clip: rect(44px, 450px, 56px, 0);
+    animation: glitch-anim 5s infinite linear alternate-reverse;
+}
+
+.glitch::after {
+    left: -2px;
+    text-shadow: -2px 0 #00ffff;
+    clip: rect(44px, 450px, 56px, 0);
+    animation: glitch-anim2 5s infinite linear alternate-reverse;
+}
+
+.typing-text {
+    font-size: 1.2rem;
+    color: #00ff88;
+    margin: 1.5rem 0;
+    min-height: 1.5rem;
+    text-shadow: 0 0 10px #00ff88;
+}
+
+.code-line {
+    font-size: 1.1rem;
+    color: #00ff41;
+    margin-top: 2rem;
+    padding: 1rem 2rem;
+    background: rgba(0, 255, 65, 0.05);
+    border: 1px solid #00ff41;
+    border-radius: 5px;
+    box-shadow:
+        0 0 20px rgba(0, 255, 65, 0.3),
+        inset 0 0 20px rgba(0, 255, 65, 0.1);
+    animation: borderGlow 2s ease-in-out infinite;
+}
+
+.prompt {
+    color: #ff00ff;
+    margin-right: 0.5rem;
+    animation: blink 1s infinite;
+}
+
+.code-content {
+    color: #00ffff;
+    text-shadow: 0 0 5px #00ffff;
+}
+
+/* ==================== 数据流效果 ==================== */
+.data-stream {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+}
+
+/* ==================== 动画定义 ==================== */
+@keyframes pulse {
+    0% {
+        transform: scale(7);
+        filter:
+            drop-shadow(0 0 20px #ff1744) drop-shadow(0 0 40px #ff1744) drop-shadow(0 5px 20px rgba(255, 23, 68, 0.4));
+    }
+
+    50% {
+        transform: scale(9.5);
+        filter:
+            drop-shadow(0 0 60px #ff1744) drop-shadow(0 0 100px #ff1744) drop-shadow(0 0 140px #ff5252) drop-shadow(0 15px 50px rgba(255, 23, 68, 0.8));
+    }
+
+    100% {
+        transform: scale(7);
+        filter:
+            drop-shadow(0 0 20px #ff1744) drop-shadow(0 0 40px #ff1744) drop-shadow(0 5px 20px rgba(255, 23, 68, 0.4));
+    }
+}
+
+/* 真实心跳动画 - 模拟心脏跳动节奏 */
+@keyframes heartbeat {
+    0% {
+        transform: scale(10);
+        filter:
+            drop-shadow(0 0 30px #ff1744) drop-shadow(0 0 60px #ff1744) drop-shadow(0 0 90px rgba(255, 23, 68, 0.6)) drop-shadow(0 10px 40px rgba(255, 23, 68, 0.5));
+    }
+
+    /* 第一次跳动 */
+    10% {
+        transform: scale(14);
+        filter:
+            drop-shadow(0 0 80px #ff1744) drop-shadow(0 0 120px #ff1744) drop-shadow(0 0 180px #ff5252) drop-shadow(0 20px 80px rgba(255, 23, 68, 0.9));
+    }
+
+    20% {
+        transform: scale(10);
+        filter:
+            drop-shadow(0 0 30px #ff1744) drop-shadow(0 0 60px #ff1744) drop-shadow(0 0 90px rgba(255, 23, 68, 0.6)) drop-shadow(0 10px 40px rgba(255, 23, 68, 0.5));
+    }
+
+    /* 第二次跳动 */
+    30% {
+        transform: scale(14);
+        filter:
+            drop-shadow(0 0 80px #ff1744) drop-shadow(0 0 120px #ff1744) drop-shadow(0 0 180px #ff5252) drop-shadow(0 20px 80px rgba(255, 23, 68, 0.9));
+    }
+
+    /* 停顿 */
+    40%,
+    100% {
+        transform: scale(10);
+        filter:
+            drop-shadow(0 0 30px #ff1744) drop-shadow(0 0 60px #ff1744) drop-shadow(0 0 90px rgba(255, 23, 68, 0.6)) drop-shadow(0 10px 40px rgba(255, 23, 68, 0.5));
+    }
+}
+
+/* 发光脉冲动画 - 与心跳同步 */
+@keyframes glowPulse {
+    0% {
+        opacity: 0.6;
+        transform: scale(1);
+    }
+
+    10% {
+        opacity: 1;
+        transform: scale(1.6);
+    }
+
+    20% {
+        opacity: 0.6;
+        transform: scale(1);
+    }
+
+    30% {
+        opacity: 1;
+        transform: scale(1.6);
+    }
+
+    40%,
+    100% {
+        opacity: 0.6;
+        transform: scale(1);
+    }
+}
+
+@keyframes rotate3d {
+    0% {
+        transform: scale(12) rotateY(0deg) rotateX(0deg);
+    }
+
+    25% {
+        transform: scale(12) rotateY(90deg) rotateX(5deg);
+    }
+
+    50% {
+        transform: scale(12) rotateY(180deg) rotateX(0deg);
+    }
+
+    75% {
+        transform: scale(12) rotateY(270deg) rotateX(-5deg);
+    }
+
+    100% {
+        transform: scale(12) rotateY(360deg) rotateX(0deg);
+    }
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translate(-50%, -50%) translateY(0px);
+    }
+
+    50% {
+        transform: translate(-50%, -50%) translateY(-20px);
+    }
+}
+
+@keyframes glow {
+
+    0%,
+    100% {
+        opacity: 0.7;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.4);
+    }
+}
+
+@keyframes glitch {
+
+    0%,
+    100% {
+        transform: translate(0);
+    }
+
+    20% {
+        transform: translate(-2px, 2px);
+    }
+
+    40% {
+        transform: translate(-2px, -2px);
+    }
+
+    60% {
+        transform: translate(2px, 2px);
+    }
+
+    80% {
+        transform: translate(2px, -2px);
+    }
+}
+
+
+@keyframes glitch-anim {
+    0% {
+        clip: rect(10px, 9999px, 31px, 0);
+    }
+
+    20% {
+        clip: rect(85px, 9999px, 140px, 0);
+    }
+
+    40% {
+        clip: rect(48px, 9999px, 95px, 0);
+    }
+
+    60% {
+        clip: rect(65px, 9999px, 119px, 0);
+    }
+
+    80% {
+        clip: rect(22px, 9999px, 73px, 0);
+    }
+
+    100% {
+        clip: rect(91px, 9999px, 53px, 0);
+    }
+}
+
+@keyframes glitch-anim2 {
+    0% {
+        clip: rect(65px, 9999px, 119px, 0);
+    }
+
+    20% {
+        clip: rect(22px, 9999px, 73px, 0);
+    }
+
+    40% {
+        clip: rect(91px, 9999px, 53px, 0);
+    }
+
+    60% {
+        clip: rect(10px, 9999px, 31px, 0);
+    }
+
+    80% {
+        clip: rect(85px, 9999px, 140px, 0);
+    }
+
+    100% {
+        clip: rect(48px, 9999px, 95px, 0);
+    }
+}
+
+@keyframes blink {
+
+    0%,
+    49% {
+        opacity: 1;
+    }
+
+    50%,
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes borderGlow {
+
+    0%,
+    100% {
+        box-shadow:
+            0 0 20px rgba(0, 255, 65, 0.3),
+            inset 0 0 20px rgba(0, 255, 65, 0.1);
+    }
+
+    50% {
+        box-shadow:
+            0 0 30px rgba(0, 255, 65, 0.6),
+            inset 0 0 30px rgba(0, 255, 65, 0.2);
+    }
+}
+
+/* ==================== 响应式设计 ==================== */
+@media (max-width: 768px) {
+    .heart-container {
+        width: 300px;
+        height: 300px;
+    }
+
+    .heart-3d {
+        width: 150px;
+        height: 150px;
+    }
+
+    .glitch {
+        font-size: 2rem;
+    }
+
+    .typing-text {
+        font-size: 1rem;
+    }
+
+    .code-line {
+        font-size: 0.9rem;
+        padding: 0.8rem 1.5rem;
+    }
+}
